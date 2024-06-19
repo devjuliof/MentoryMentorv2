@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MemoryMentor</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <ul>
+        <li><a href="#create">Create Flash Card</a></li>
+        <li><a href="view.html">View Flash Cards</a></li>
+      </ul>
+    </nav>
+    <h1>MemoryMentor</h1>
+  </header>
+  
+  <main>
+    <div id="create-card">
+      <h2>Create new Flash Card</h2>
+      <form id="flashCardForm">
+        <label for="topic">Topic:</label>
+        <input type="text" id="topic" name="topi" required>
+        
+        <label for="front">Front:</label>
+        <input type="text" id="front" name="fron" required>
+        
+        <label for="verse">Verse:</label>
+        <input type="text" id="verse" name="vers" required>
+        
+        <button type="button" id="btnenviar">Add Flash Card</button>
+      </form>
+    </div>
+
+  </main>
+  
+  <footer>
+    <p>&copy; 2024 Flash Cards</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
