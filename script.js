@@ -105,6 +105,14 @@ function displayTopics(topic) {
     });
     newDiv.appendChild(buttonAcessCards)
     buttonAcessCards.setAttribute("class", "btnicon fas fa-folder")
+
+    const buttonEditCards = document.createElement("button")
+    buttonEditCards.setAttribute("class", "btnicon fas fa-pen")
+    buttonEditCards.addEventListener("click", event => {
+        event.stopPropagation()
+        editCards(topic)
+    })
+    newDiv.appendChild(buttonEditCards)
     
     const h2topic = document.createElement("h2")
     h2topic.textContent = (topic)
@@ -115,29 +123,46 @@ function displayCardsForTopic(topic) {
     let parent = document.getElementById('MyFlashCards')
 
     //enquanto tiver filhos da Section com id MyFlashCards esse laço removerá
-    while (parent.firstChild) {
-    parent.removeChild(parent.firstChild)
-    }
+    clearSectionMyFlashCards()
 
     const baseFlashCards = JSON.parse(localStorage.getItem('flashcards'))
     const topicData = baseFlashCards.find(item => item.topic === topic) //procura o index do topico e coloca na váriavel topicData
 
-    //para cada cards de topicdata ele cria os cards no HTML
+    // Função para ajustar a altura do textarea conforme o conteúdo
+    function adjustHeight(element) {
+        element.style.height = 'auto';
+        element.style.height = (element.scrollHeight) + 'px';
+    }
+
     topicData.cards.forEach(card => {
-        const cardDiv = document.createElement("div");
-        cardDiv.setAttribute("id", "bloco-cards");
+        let newDiv = document.createElement("div");
+        newDiv.setAttribute("class", "div-editar-flashcard");
 
-        const front = document.createElement("div");
-        front.textContent = "Pergunta: " + card.front
-        cardDiv.appendChild(front);
+        // Criando textarea para a pergunta
+        let inputPergunta = document.createElement("textarea");
+        inputPergunta.setAttribute("class", "input-editar");
+        inputPergunta.value = card.front;
+        newDiv.appendChild(inputPergunta);
 
-        const verse = document.createElement("div");
-        verse.textContent = "Resposta: " + card.verse;
-        cardDiv.appendChild(verse);
+        // Adicionando evento de entrada para ajustar a altura dinamicamente
+        inputPergunta.addEventListener('input', function() {
+            adjustHeight(inputPergunta);
+        });
 
-        parent.appendChild(cardDiv);
+        // Criando textarea para a resposta
+        let inputResposta = document.createElement("textarea");
+        inputResposta.setAttribute("class", "input-editar");
+        inputResposta.value = card.verse;
+        newDiv.appendChild(inputResposta);
+
+        // Adicionando evento de entrada para ajustar a altura dinamicamente
+        inputResposta.addEventListener('input', function() {
+            adjustHeight(inputResposta);
+        });
+
+        parent.appendChild(newDiv);
     });
-}
+    };
 
 //função que cria novo topico
 //ela usa o metodo some para testar se o topico ja existe
@@ -248,3 +273,17 @@ function studyMode(topic) {
         });
     }
 }
+
+    function editCards(topic){
+        clearSectionMyFlashCards()
+
+        displayCardsForTopic(topic)
+    }
+
+    function clearSectionMyFlashCards() {
+        let parent = document.getElementById('MyFlashCards')
+
+        while (parent.firstChild) {
+            parent.removeChild(parent.firstChild)
+        }
+    }
