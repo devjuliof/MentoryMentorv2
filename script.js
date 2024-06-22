@@ -6,40 +6,9 @@ if (btnSubmit) {
     btnSubmit.addEventListener("click", createFlashCard);
 }
 
-/*
-[
-    {
-        id: 1,
-        topic: "Ciencias",
-        cards: [
-             { front: "qual é a fórmula da água?", verse: "H2O" },
-             { question: "O que é fotossíntese?", answer: "Processo pelo qual as plantas produzem energia a partir da luz solar." }
-
-        ]
-    },
-    {
-        id: 2,
-        topic: "Literatura",
-        cards: [
-          { question: "Quem escreveu 'Dom Quixote'?", answer: "Miguel de Cervantes" },
-          { question: "Qual é a obra mais famosa de William Shakespeare?", answer: "Romeu e Julieta" }
-        ]
-    },
-    {
-        id: 3,
-        topic: "Geografia",
-        cards: [
-          { question: "Qual é o maior continente?", answer: "Ásia" },
-          { question: "Qual é o rio mais longo do mundo?", answer: "Rio Nilo" }
-        ]
-    }
-]
-*/
-
 var baseFlashCards = []
 
 function createFlashCard() {
-    console.log("kaksksksa")
     // base flash cards recebe o local storage ou um array
     baseFlashCards = JSON.parse(localStorage.getItem('flashcards')) || []
 
@@ -110,7 +79,7 @@ function displayTopics(topic) {
     buttonEditCards.setAttribute("class", "btnicon fas fa-pen")
     buttonEditCards.addEventListener("click", event => {
         event.stopPropagation()
-        editCards(topic)
+        buttonEditCardsClicked(topic)
     })
     newDiv.appendChild(buttonEditCards)
     
@@ -122,7 +91,7 @@ function displayTopics(topic) {
 function displayCardsForTopic(topic) {
     let parent = document.getElementById('MyFlashCards')
 
-    //enquanto tiver filhos da Section com id MyFlashCards esse laço removerá
+    // Enquanto tiver filhos da Section com id MyFlashCards esse laço removerá
     clearSectionMyFlashCards()
 
     const baseFlashCards = JSON.parse(localStorage.getItem('flashcards'))
@@ -134,12 +103,25 @@ function displayCardsForTopic(topic) {
         element.style.height = (element.scrollHeight) + 'px';
     }
 
-    topicData.cards.forEach(card => {
+    var contador = 0
+    // Nesse forEach cada textarea recebe um id, as perguntas recebem ids
+    //pares e as respostas ids impares, para conseguir fazer a substituição quando editar
+    topicData.cards.forEach((card) => {
         let newDiv = document.createElement("div");
         newDiv.setAttribute("class", "div-editar-flashcard");
 
         // Criando textarea para a pergunta
         let inputPergunta = document.createElement("textarea");
+        inputPergunta.setAttribute('id', contador)
+
+        // Adicionando uma IIFE para coletar o valor do input quando
+        //o usuario "desfoca" do input
+        inputPergunta.addEventListener("blur", (function(contadorAtual) {
+            return () => {
+            let valorInput = document.getElementById(contadorAtual).value
+            editCards(valorInput, topic, contadorAtual)
+            };
+        })(contador))
         inputPergunta.setAttribute("class", "input-editar");
         inputPergunta.value = card.front;
         newDiv.appendChild(inputPergunta);
@@ -149,8 +131,17 @@ function displayCardsForTopic(topic) {
             adjustHeight(inputPergunta);
         });
 
+        contador++
+
         // Criando textarea para a resposta
         let inputResposta = document.createElement("textarea");
+        inputResposta.setAttribute('id', contador)
+        inputResposta.addEventListener("blur", (function(contadorAtual) {
+            return () => {
+            let valorInput = document.getElementById(contadorAtual).value
+            editCards(valorInput, topic, contadorAtual)
+            }
+        })(contador));
         inputResposta.setAttribute("class", "input-editar");
         inputResposta.value = card.verse;
         newDiv.appendChild(inputResposta);
@@ -160,6 +151,7 @@ function displayCardsForTopic(topic) {
             adjustHeight(inputResposta);
         });
 
+        contador++
         parent.appendChild(newDiv);
     });
     };
@@ -274,9 +266,10 @@ function studyMode(topic) {
     }
 }
 
-    function editCards(topic){
+    function buttonEditCardsClicked(topic){
         clearSectionMyFlashCards()
 
+        //chamando a função para mostrar os cards com o argumento topic
         displayCardsForTopic(topic)
     }
 
@@ -286,4 +279,30 @@ function studyMode(topic) {
         while (parent.firstChild) {
             parent.removeChild(parent.firstChild)
         }
+    }
+
+    // Substitui o front ou verse do flash card e coloca no localStorage novamente
+    function editCards(valorInput, topic, contadorAtual) {
+        let baseFlashCards = JSON.parse(localStorage.getItem('flashcards'))
+        
+        // procura o topico e guarda na variavel
+        const topicData = baseFlashCards.find(item => item.topic === topic)
+
+        // Divide por dois pois a estrutura do array é
+        // cards: [
+        //  {front: "pergunta", verse: "resposta"},
+        //  {front: "pergunta", verse: "resposta"}
+        //  ]
+        // e cada pergunta recebe um contador par e cada resposta um contador impar
+        // ou seja para cada um indice card, existem dois contadores diferentes (um para a pregunta)
+        // e outro para a resposta, sendo assim dentro do cards indice 0, tem o contador 0 e o contador 1
+        // dentro do cards indixe 1, tem o contador 2 e 3 e assim por diante
+        let index = Math.floor(contadorAtual / 2)
+        if (0 === contadorAtual % 2) {
+            topicData.cards[index].front = valorInput // Substituimos pelo novo valor
+        } else if (1 === contadorAtual % 2) {
+            topicData.cards[index].verse = valorInput // Substituimos pelo novo valor
+        }
+
+        localStorage.setItem('flashcards', JSON.stringify(baseFlashCards))
     }
