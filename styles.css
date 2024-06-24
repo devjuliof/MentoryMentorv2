@@ -123,6 +123,15 @@ footer {
 .fas {
   font-size: 22px;
   margin: 2px;
+  font-weight: 100;
+}
+
+.fa-9x::before {
+  font-size: 20px;
+}
+
+button.btnicon.fas.fa-trash-alt.fa-9x {
+  margin-top: 0;
 }
 
 .btnicon {
@@ -144,7 +153,7 @@ footer {
   align-items: center;
 }
 
-#bloco-flash-card {
+.bloco-flash-card {
   cursor: pointer;
   width: 90%;
   padding: 1%;
@@ -171,7 +180,7 @@ footer {
   border-radius: 20px;
 }
 
-#bloco-flash-card:hover {
+.bloco-flash-card:hover {
   background-color: #ececec;
 }
 
@@ -200,7 +209,6 @@ footer {
   height: 30px;
   width: 30px;
 }
-
 
 /* Card flip */
 .blocao {
@@ -256,6 +264,7 @@ footer {
   color: white;
   font-size: 20px;
 }
+
 .btn-proximo {
   width: 100%;
   max-width: 310px;
@@ -272,11 +281,15 @@ footer {
   box-sizing: border-box;
   padding: 10px;
   font-size: 16px;
-  resize: none; /* Impede redimensionamento manual pelo usuário */
-  overflow: hidden; /* Esconde barra de rolagem */
+  resize: none;
+  overflow: hidden;
 }
+
 .div-editar-flashcard {
   display: flex;
-  width: 90%;
+  width: 80%;
   margin-bottom: 10px;
+}
+
+.trash-editcards {
 }

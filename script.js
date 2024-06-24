@@ -61,12 +61,21 @@ function displayTopics(topic) {
     const sectionMyFlashCards = document.getElementById("MyFlashCards")
 
     const newDiv = document.createElement("div")
-    newDiv.setAttribute("id", "bloco-flash-card")
+    newDiv.setAttribute("class", "bloco-flash-card")
+    newDiv.setAttribute("id", topic)
     newDiv.addEventListener("click", event => {
         event.stopPropagation()
         studyMode(topic)
     })
     sectionMyFlashCards.appendChild(newDiv)
+
+    const buttonRemoveDeck = document.createElement('button')
+    buttonRemoveDeck.setAttribute("class", "btnicon fas fa-trash")
+    buttonRemoveDeck.addEventListener("click", event => {
+        event.stopPropagation()
+        removeDeck(topic)
+    })
+    newDiv.appendChild(buttonRemoveDeck)
 
     const buttonAcessCards = document.createElement("button")
     buttonAcessCards.addEventListener("click", function () { //adiciona para cada botão um eventListener com o arg topic diferente
@@ -88,6 +97,8 @@ function displayTopics(topic) {
     newDiv.appendChild(h2topic)
     }
 
+
+    // Função que mostra os cards por tópico na hora de editar
 function displayCardsForTopic(topic) {
     let parent = document.getElementById('MyFlashCards')
 
@@ -150,6 +161,16 @@ function displayCardsForTopic(topic) {
         inputResposta.addEventListener('input', function() {
             adjustHeight(inputResposta);
         });
+
+        const buttonRemoveCard = document.createElement('button')
+        buttonRemoveCard.setAttribute("class", "btnicon fas fa-trash trash-editcards")
+        buttonRemoveCard.addEventListener("click", (function(contadorAtual) {
+            return () => {
+            let elemento = document.getElementById(contadorAtual)
+            removeCard(elemento, topic)
+            }
+        })(contador));
+        newDiv.appendChild(buttonRemoveCard)
 
         contador++
         parent.appendChild(newDiv);
@@ -296,13 +317,44 @@ function studyMode(topic) {
         // e cada pergunta recebe um contador par e cada resposta um contador impar
         // ou seja para cada um indice card, existem dois contadores diferentes (um para a pregunta)
         // e outro para a resposta, sendo assim dentro do cards indice 0, tem o contador 0 e o contador 1
-        // dentro do cards indixe 1, tem o contador 2 e 3 e assim por diante
+        // dentro do cards indice 1, tem o contador 2 e 3 e assim por diante
         let index = Math.floor(contadorAtual / 2)
         if (0 === contadorAtual % 2) {
             topicData.cards[index].front = valorInput // Substituimos pelo novo valor
         } else if (1 === contadorAtual % 2) {
             topicData.cards[index].verse = valorInput // Substituimos pelo novo valor
         }
+
+        localStorage.setItem('flashcards', JSON.stringify(baseFlashCards))
+    }
+
+    // Função que remove o deck da base de dados e do DOM
+    function removeDeck(topic) {
+        let baseFlashCards = JSON.parse(localStorage.getItem('flashcards'))
+        //acha o topico e coloca ele e seus cards na variavel topicData
+        const topicData = baseFlashCards.findIndex(item => item.topic === topic)
+
+        // Apaga apenas o topico encontrado e devolve ao array
+        baseFlashCards.splice(topicData, 1)
+        localStorage.setItem('flashcards', JSON.stringify(baseFlashCards))
+        
+        // Retorna o feedback visual na página
+        let divRemovida = document.getElementById(topic)
+        let parent = document.getElementById('MyFlashCards')
+        parent.removeChild(divRemovida)
+    }
+
+    // Função que remove um card especifico
+    function removeCard(elemento, topic) {
+        let baseFlashCards = JSON.parse(localStorage.getItem('flashcards'))
+        const topicData = baseFlashCards.find(item => item.topic === topic)
+        
+        topicData.cards.splice(idElemento, 1)
+
+        let parent = document.getElementById('MyFlashCards')
+
+        let divParaDeletar = elemento.parentElement
+        parent.removeChild(divParaDeletar)
 
         localStorage.setItem('flashcards', JSON.stringify(baseFlashCards))
     }
