@@ -33,19 +33,13 @@ function createFlashCard() {
     localStorage.setItem('flashcards', JSON.stringify(baseFlashCards))
 }
 
+// Função para recuperar os flashcards quando a página estiver totalmente carregada
+document.addEventListener('DOMContentLoaded', function() {
+    recuperarFlashCard();
+});
+
 function recuperarFlashCard() {
-    //coleta o botao de load para remover
-    let parent = document.getElementById('MyFlashCards')
-
-    while (parent.firstChild) {
-        parent.removeChild(parent.firstChild)
-    }
-
-    let btnCarregar = document.getElementById('btn-carregar-flashcards')
-    if (btnCarregar) {
-    btnCarregar.remove()
-}
-
+    clearSectionMyFlashCards()
     //transforma o json em array para poder ser usado
     let baseFlashCardsDisplay = JSON.parse(localStorage.getItem('flashcards'))
 
@@ -127,6 +121,14 @@ function displayCardsForTopic(topic) {
 
         // Adicionando uma IIFE para coletar o valor do input quando
         //o usuario "desfoca" do input
+        const buttonRemoveCard = document.createElement('button')
+        buttonRemoveCard.setAttribute("class", "btnicon fas fa-trash trash-editcards")
+        buttonRemoveCard.addEventListener("click", (function(contadorAtual) {
+            return () => {
+            removeCard(topic, contadorAtual)
+            }
+        })(contador));
+
         inputPergunta.addEventListener("blur", (function(contadorAtual) {
             return () => {
             let valorInput = document.getElementById(contadorAtual).value
@@ -162,14 +164,6 @@ function displayCardsForTopic(topic) {
             adjustHeight(inputResposta);
         });
 
-        const buttonRemoveCard = document.createElement('button')
-        buttonRemoveCard.setAttribute("class", "btnicon fas fa-trash trash-editcards")
-        buttonRemoveCard.addEventListener("click", (function(contadorAtual) {
-            return () => {
-            let elemento = document.getElementById(contadorAtual)
-            removeCard(elemento, topic)
-            }
-        })(contador));
         newDiv.appendChild(buttonRemoveCard)
 
         contador++
@@ -330,7 +324,9 @@ function studyMode(topic) {
 
     // Função que remove o deck da base de dados e do DOM
     function removeDeck(topic) {
+
         let baseFlashCards = JSON.parse(localStorage.getItem('flashcards'))
+
         //acha o topico e coloca ele e seus cards na variavel topicData
         const topicData = baseFlashCards.findIndex(item => item.topic === topic)
 
@@ -344,17 +340,19 @@ function studyMode(topic) {
         parent.removeChild(divRemovida)
     }
 
-    // Função que remove um card especifico
-    function removeCard(elemento, topic) {
+    function removeCard(topic, contadorAtual) {
         let baseFlashCards = JSON.parse(localStorage.getItem('flashcards'))
+
         const topicData = baseFlashCards.find(item => item.topic === topic)
-        
-        topicData.cards.splice(idElemento, 1)
 
-        let parent = document.getElementById('MyFlashCards')
+        // o contador é multiplicado por 2, ou seja o 0 recebe 0, mas o 1 vira 2
+        // o 2 vira 4 o 2 vira 6, e assim por diante, então é necessário dividir por dois
+        let indexRemoveCard = contadorAtual / 2
 
-        let divParaDeletar = elemento.parentElement
-        parent.removeChild(divParaDeletar)
+        topicData.cards.splice(indexRemoveCard, 1)
 
         localStorage.setItem('flashcards', JSON.stringify(baseFlashCards))
+
+        clearSectionMyFlashCards()
+        displayCardsForTopic(topic)
     }

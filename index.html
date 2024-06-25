@@ -11,7 +11,7 @@
     <nav>
       <ul>
         <li><a href="#create">Create Flash Card</a></li>
-        <li><a href="view.html">View Flash Cards</a></li>
+        <li><a href="view.html" onclick="recuperarFlashCard()">View Decks</a></li>
       </ul>
     </nav>
     <h1>MemoryMentor</h1>
@@ -24,13 +24,13 @@
         <label for="topic">Topic:</label>
         <input type="text" id="topic" name="topi" required>
         
-        <label for="front">Front:</label>
+        <label for="front">Question:</label>
         <input type="text" id="front" name="fron" required>
         
-        <label for="verse">Verse:</label>
+        <label for="verse">Answer:</label>
         <input type="text" id="verse" name="vers" required>
         
-        <button type="button" id="btnenviar">Add Flash Card</button>
+        <button type="button" id="btnenviar"><span>Add Flash Card</span></button>
       </form>
     </div>
 
