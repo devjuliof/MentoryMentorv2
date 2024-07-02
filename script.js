@@ -386,7 +386,10 @@ function studyMode(topic) {
             mais10.textContent = "Study more 10";
 
             parent.appendChild(newDiv);
-            newDiv.append(h2, sair, mais10);
+            newDiv.appendChild(h2);
+            newDiv.appendChild(sair);
+            newDiv.appendChild(mais10);
+            
 
             sair.addEventListener('click', function() {
                 clearSectionMyFlashCards();
