@@ -3,43 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MemoryMentor - Create and review flashcards to boost your learning.">
+  <meta name="keywords" content="flashcards, learning, study, education, MemoryMentor">
+  <meta name="author" content="Julio Cesar">
+
   <title>MemoryMentor</title>
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header>
     <nav>
       <ul>
-        <li><a href="#create">Create Flash Card</a></li>
+        <li><a href="index.html">Create Flash Card</a></li>
         <li><a href="view.html" onclick="recuperarFlashCard()">View Decks</a></li>
       </ul>
     </nav>
     <h1>MemoryMentor</h1>
   </header>
-  
   <main>
-    <div id="create-card">
-      <h2>Create new Flash Card</h2>
-      <form id="flashCardForm">
-        <label for="topic">Topic:</label>
-        <input type="text" id="topic" name="topi" required>
-        
-        <label for="front">Question:</label>
-        <input type="text" id="front" name="fron" required>
-        
-        <label for="verse">Answer:</label>
-        <input type="text" id="verse" name="vers" required>
-        
-        <button type="button" id="btnenviar"><span>Add Flash Card</span></button>
-      </form>
-    </div>
-
+    <section id="create-flash-card">
+      <div id="create-card">
+        <h2>Create new Flash Card</h2>
+        <form id="flashCardForm">
+          <label for="topic">Topic:</label>
+          <div id="topicContainer">
+            <input type="text" autocomplete="off" id="topic" name="topicInput" placeholder="Enter a new topic">
+            <select class="topic-select" id="topicSelect" name="topicSelect">
+              <option value="" disabled selected>Select a topic</option>
+            </select>
+          </div>
+          <label for="front">Question:</label>
+          <input type="text" id="front" name="front" required>
+          <label for="verse">Answer:</label>
+          <input type="text" id="verse" name="verse" required>
+          <button type="button" id="btnenviar"><span>Add Flash Card</span></button>
+        </form>
+      </div>
+    </section>
   </main>
-  
   <footer>
-    <p>&copy; 2024 Flash Cards</p>
+    <p>&copy; by Julio Cesar</p>
   </footer>
-
   <script src="script.js"></script>
 </body>
 </html>
