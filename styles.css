@@ -10,6 +10,7 @@ body {
   box-sizing: border-box;
   background-color: #f0f0f0;
   overflow-x: hidden;
+  overflow-y: hidden;
 }
 h1, h2, h3, h4, h5, h6, p, a, li, blockquote, span, div, input, textarea, button {
   font-family: 'Poppins', sans-serif;
@@ -127,7 +128,6 @@ footer {
   text-align: center;
   background-color: #333;
   color: white;
-  bottom: 0;
   position: absolute;
   width: 100%;
 }
