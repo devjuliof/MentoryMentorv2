@@ -132,7 +132,7 @@ footer {
   width: 100%;
 }
 
-@media screen and (max-height: 652px) {
+@media screen and (min-height: 652px) {
   footer {
     bottom: 0;
   }
