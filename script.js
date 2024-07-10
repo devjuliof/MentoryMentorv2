@@ -585,7 +585,6 @@ function studyMode(topic) {
 function populateTopicsSelect() {
     const select = document.getElementById('topicSelect');
     
-    // Simulando o localStorage com baseFlashCards
     const baseFlashCards = JSON.parse(localStorage.getItem('flashcards'));
     
     baseFlashCards.forEach(topicObj => {
@@ -602,17 +601,17 @@ function populateTopicsSelect() {
 // Event listener para alternar entre input e select conforme necessário
 const topicInput = document.getElementById('topic');
 const topicSelect = document.getElementById('topicSelect');
-const defaultOptionText = 'Select a topic'; // texto da opção padrão
+const defaultOptionText = 'Select a topic';
 
 topicInput.addEventListener('input', function() {
-  toggleTopicInput('input'); // Mostra o campo de input ao digitar
+  toggleTopicInput('input'); 
 });
 
 topicSelect.addEventListener('change', function() {
   if (topicSelect.options[topicSelect.selectedIndex].text === defaultOptionText) {
-    toggleTopicInput('fora'); // Chama a função se a opção selecionada for a padrão
+    toggleTopicInput('fora'); 
   } else {
-    toggleTopicInput('select'); // Esconde o campo de input quando uma opção do select é selecionada
+    toggleTopicInput('select');
   }
 });
 
@@ -630,8 +629,8 @@ function toggleTopicInput(param) {
     case 'fora':
       topicInput.style.display = 'inline';
       topicSelect.style.display = 'inline';
-      topicInput.value = ''; // Apaga o conteúdo do input
-      topicSelect.selectedIndex = 0; // Reseta o select para o valor padrão (primeira opção)
+      topicInput.value = '';
+      topicSelect.selectedIndex = 0;
       break;
   }
 }
@@ -646,6 +645,5 @@ document.addEventListener('click', function(event) {
   if (!elemento1.contains(event.target) && !elemento2.contains(event.target)
       && !elemento3.contains(event.target) && !elemento4.contains(event.target)) {
     toggleTopicInput('fora');
-    console.log('Clique fora dos elementos detectado!');
   }
 });
