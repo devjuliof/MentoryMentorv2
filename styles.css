@@ -10,7 +10,6 @@ body {
   box-sizing: border-box;
   background-color: #f0f0f0;
   overflow-x: hidden;
-  overflow-y: hidden;
 }
 h1, h2, h3, h4, h5, h6, p, a, li, blockquote, span, div, input, textarea, button {
   font-family: 'Poppins', sans-serif;
